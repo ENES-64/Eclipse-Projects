@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class BitWisePractice {
 	public static void main(String[] args) {
+		//Hasim Enes Yurekli
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Enter two 4-bit values (0 - 7):");
