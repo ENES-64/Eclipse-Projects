@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author enesy
+ *
+ */
+module MyEclipse {
+}
