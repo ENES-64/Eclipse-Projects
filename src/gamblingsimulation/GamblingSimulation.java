@@ -112,7 +112,7 @@ public class GamblingSimulation {
 					total += playerBalances[i];
 					Thread.sleep(rand.nextInt(2125) + 175);
 					//Percentage math = 100/(total/person)
-					new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+					new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor(); //Clear console.
 					System.out.print("ID 0001: %");
 					System.out.printf("%05.2f - $%.2f \n", 100/(total/balance)+0.01, balance);
 					g = 0;

@@ -2,8 +2,7 @@ package stringpracticeexpressionsmeta;
 
 public class StringPracticeExpressionsMeta {
 	public static void main(String[] args) {
-		/* Enes
-		 * boolean matches(String regex)
+		/* boolean matches(String regex)
 		 * Meta Characters:
 		 * \d = Digit
 		 * \D = Not digit

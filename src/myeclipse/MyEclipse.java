@@ -1,8 +1,8 @@
 package myeclipse;
 import java.util.Scanner;
 
+//(x > y ? x : y) - compare.
 public class MyEclipse {
-
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
