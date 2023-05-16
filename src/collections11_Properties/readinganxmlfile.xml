@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Person</comment>
+<entry key="Name">John</entry>
+<entry key="Age">30</entry>
+<entry key="Address">Tennessee</entry>
+<entry key="Country">USA</entry>
+</properties>

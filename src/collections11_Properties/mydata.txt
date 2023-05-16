@@ -1,0 +1,6 @@
+#Laptop
+#Tue May 16 15:11:27 EDT 2023
+Brand=MSI
+Model=GL65
+OS=Windows 10
+Processor=AMD 5950X
