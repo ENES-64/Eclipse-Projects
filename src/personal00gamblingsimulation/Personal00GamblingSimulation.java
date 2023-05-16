@@ -1,10 +1,11 @@
-package gamblingsimulation;
+package personal00gamblingsimulation;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class GamblingSimulation {
+public class Personal00GamblingSimulation {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		Scanner sc = new Scanner(System.in);
 		Random rand = new Random();

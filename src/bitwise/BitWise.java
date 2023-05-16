@@ -20,9 +20,11 @@ public class BitWise {
 		int bitWiseNOT_NUM = ~num;
 		int bitWiseNOT_NUM2 = ~num2;
 		
+		int i = Integer.parseInt(Integer.toBinaryString(num));
+		int j = Integer.parseInt(Integer.toBinaryString(num2));
 		System.out.println("All bitwise operations:");
-		System.out.println("Binary of the first number: " + String.format("%s", Integer.toBinaryString(num)));
-		System.out.println("Binary of the second number: " + String.format("%s", Integer.toBinaryString(num2)));
+		System.out.printf("Binary of the first number: %06d\n", i);
+		System.out.printf("Binary of the second number: %06d\n", j);
 		System.out.println("\nAND: " + bitWiseAND + ".\nBinary: " + String.format("%s", Integer.toBinaryString(bitWiseAND)));
 		System.out.println("\nOR: " + bitWiseOR + ".\nBinary: " + String.format("%s", Integer.toBinaryString(bitWiseOR)));
 		System.out.println("\nXOR: " + bitWiseXOR + ".\nBinary: " + String.format("%s", Integer.toBinaryString(bitWiseXOR)));

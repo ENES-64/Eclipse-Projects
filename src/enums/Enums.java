@@ -1,4 +1,5 @@
 package enums;
+
 /*
 In an enum, we can have defined constants.
 Enum constants should be written in all capital.

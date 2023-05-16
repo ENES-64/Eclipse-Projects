@@ -1,0 +1,1 @@
+favoriteitem:3;averagetime:1230;refunds:15;disruptions:2;totalvisits:150;
