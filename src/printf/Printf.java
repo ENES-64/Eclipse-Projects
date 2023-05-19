@@ -1,6 +1,6 @@
-package println;
+package printf;
 
-public class PrintLn {
+public class Printf {
 	public static void main(String[] args) {
 		/* EXPLAINATION FOR 'printf' AND 'format':
 		 * %[argument index '$'][flags][width][dot precision '.']conversion
