@@ -170,5 +170,6 @@ public class Personal00GamblingSimulation {
 					totalBalance -= balance;
 			}
 		}
+	sc.close();
 	}
 }
