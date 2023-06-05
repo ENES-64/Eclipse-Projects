@@ -13,6 +13,7 @@ public class Collections07_TreeMap {
 		
 		tm.put(4, "E");
 		tm.put(6, "G");
+		tm.put(4, "X");
 		
 		//CeilingEntry returns a value equal or greater than the given value.
 		System.out.println(tm.ceilingEntry(5).getValue());
