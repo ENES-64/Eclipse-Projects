@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.io.*;
 
-//TODO Calculate the profits/losses using the statistic data file by inputing an ante price.
+//TODO Save the ante price.
 //This program simulates a blackjack game and saves statistics to a file.
 public class Personal02BlackJack {
 	//GLOBAL VARIABLES:
@@ -18,6 +18,7 @@ public class Personal02BlackJack {
 		while(true) {
 			//STATS SYSTEM START:
 			TreeMap<Integer, Integer> stats =new TreeMap<>();
+			//This must be updated if the location changes.
 			File file = new File("/Users/enesy/MyJava/Eclipse/MyEclipse/src/personal02blackjack/statistics.txt");
 			FileInputStream fi = null;
 			//Creating an input stream for a scanner to read it.
@@ -66,14 +67,17 @@ public class Personal02BlackJack {
 			dealerHasAce = false;
 			/* 	First row stores all the cards that are pulled: Even index = user, odd index = dealer.
 				Card definitions: 2 through 10 are numerics, 1 = ACE, 11 = JACK, 12 = QUEEN, 13 = KING.	
-				Second row stores the card's type: 0 = Club (♣), 1 = Diamond (♦), 2 = Hearts (♥), 3 = Spades (♠). */
-			//18 is the maximum number of cards that can be pulled in one game between user and dealer.
-			int[][] cards =new int[2][18];
+				Second row stores the card's type: 0 = Club (♣), 1 = Diamond (♦), 2 = Hearts (♥), 3 = Spades (♠). 
+			
+			18 is the maximum number of cards that can be pulled in one game between user and dealer.
+			So, 18 is the Magic Number. https://en.wikipedia.org/wiki/Magic_number_(programming)
+			Using byte since number of cards in a deck can't exceed 52.	*/
+			final byte MAXCARDS = 18;
+			int[][] cards =new int[2][MAXCARDS];
 			//Counts are initialized to compensate for the 4 cards that are pulled at the beginning.
 			int userTotal = 0, dealerTotal = 0, userCount = 2, dealerCount = 3;
 			//Pulling the first 2 cards for user and dealer.
 			pullCard(cards, 0); pullCard(cards, 1); pullCard(cards, 2); pullCard(cards, 3);
-			
 			userTotal = getCardValue(cards, 0, 0) + getCardValue(cards, 2, 0);
 			dealerTotal = getCardValue(cards, 1, 0) + getCardValue(cards, 3, 0);
 			System.out.print("Dealer's hand:" + showCard(cards, 1));
@@ -146,18 +150,15 @@ public class Personal02BlackJack {
 					System.out.print("\nPush.");
 					statIncrement(stats, 2);
 					statIncrement(stats, 6);
-				}
-				else if(userTotal <= 21 && dealerTotal > userTotal && dealerTotal <= 21) {
+				} else if(userTotal <= 21 && dealerTotal > userTotal && dealerTotal <= 21) {
 					System.out.print("\nDealer wins.");
 					statIncrement(stats, 1);
 					statIncrement(stats, 6);
-				}
-				else if((dealerTotal > 21 || userTotal > dealerTotal) && userTotal <= 21) {
+				} else if((dealerTotal > 21 || userTotal > dealerTotal) && userTotal <= 21) {
 					System.out.print("\nYou win!");
 					statIncrement(stats, 0);
 					statIncrement(stats, 6);
-				}
-				else {
+				} else {
 					System.out.print("\nBust.");
 					statIncrement(stats, 1);
 					statIncrement(stats, 6);
@@ -178,18 +179,33 @@ public class Personal02BlackJack {
 			String option = sc.next();
 			//Show statistics.
 			if(option.equalsIgnoreCase("s")) {
-				for(int i=0;i<6;i++)
+				System.out.println("Enter the ante price: ");
+				double ante;
+				while(true) {
+					try {
+						ante = sc.nextDouble();
+						break;
+					} catch(Exception e) {
+						System.out.println("You can only enter numbers. Try again.");
+					}
+				}
+				//Calculating the potential profit of each statistics.
+				double profit[] = {stats.get(0) * ante, stats.get(1) * ante * -1, 0, stats.get(3) * ante * 1.3, 
+						stats.get(4) * ante * -1, stats.get(5) * ante * 0.3, 0};
+				for(int i=0;i<6;i++) {
+					//Calculating the final potential profit.
+					profit[6] += profit[i];
 					if(stats.get(i)>0) {
 						float current = stats.get(i), total = stats.get(6), percentage = (current / total) * 100F;
 						System.out.printf("%1$s %2$d ", statNames[i], stats.get(i));
 						if(i<3)
-							System.out.print("	");
-						System.out.print("	%");
-						System.out.printf("%05.2f\n", percentage);
+							System.out.print("\t");
+						System.out.printf("\t%%%1$05.2f\t$%2$+05.2f\n", percentage, profit[i]);
 					}
-				System.out.printf("%1$s %2$d ", statNames[6], stats.get(6));
-			//Debug stuff.	
-			} if(option.equalsIgnoreCase("d")) {
+				}
+				System.out.printf("%1$s %2$d\t\t$%3$+05.2f", statNames[6], stats.get(6), profit[6]);
+			}//Debug stuff.
+			if(option.equalsIgnoreCase("d")) {
 				for(int i=0;i<16;i++)
 					System.out.print(i + " " +  cards[1][i] + "|" + cards[0][i] + ", ");
 				System.out.println("\nuserTotal = " + userTotal + ", dealerTotal = " + dealerTotal);
@@ -203,16 +219,16 @@ public class Personal02BlackJack {
 					System.out.println("There are no unknown settings.");
 				}
 				System.out.println("stats: " + stats);
-			//Reset the stats.
-			} if(option.equalsIgnoreCase("r")) {
+			}//Reset the stats.
+			if(option.equalsIgnoreCase("r")) {
 				System.out.println("Are you sure you want to reset all the statistics? (Y/N)");
 				if(sc.next().equalsIgnoreCase("y"))
 					try(FileWriter write = new FileWriter(file, false)) {
 						write.write("wins:0;losses:0;draws:0;blackjackwins:0;blackjacklosses:0;blackjackdraws:0;totalhandsplayed:0;\t\t\t\t\t\t");
 						System.out.println("All the statistics have been reset.");
 					} catch (IOException e) {System.out.println(e);}
-			//Ask the user if they want to continue again.
-			} if(option.equalsIgnoreCase("c")==false) {
+			}//Ask the user if they want to continue again.
+			if(option.equalsIgnoreCase("c")==false) {
 				System.out.println("\nType C to continue. Anything else to exit.");
 				if(sc.next().equalsIgnoreCase("c")==false) {
 					//Close everything.
@@ -264,8 +280,7 @@ public class Personal02BlackJack {
 		}
 		return 1;
 	}
-	//Loading stats into a TreeMap collection and also Keeping a track on
-	//how many settings are present in case some are missing.
+	//Loading stats into a TreeMap collection.
 	static void setSetting(String setting, TreeMap<Integer, Integer> stats) {
 		int stat = Integer.parseInt(setting.substring(setting.indexOf(":") + 1, setting.length()));
 		setting = setting.substring(0, setting.indexOf(":"));
