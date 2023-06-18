@@ -37,22 +37,32 @@ public class Personal03TimeAddition {
 	}
 }
 
-/* SIMPLIFIED TURKISH VERSION:
+/* ALT VERSION:
+
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
-public class Main {
+public class Personal03TimeAddition {
 	public static void main(String[] args) {
 		DecimalFormat df = new DecimalFormat("#.00");
 		Scanner sc =new Scanner(System.in);
 		System.out.println("Saat başı doları girin: ");
 		double money = sc.nextDouble()/60;
-		System.out.println("Saat ve dakikayı girin |<SAAT> <DAKIKA>|: ");
-		System.out.println("(Bitirmek için negatif numara girin)");
-		int hour = 0, minute = 0, total = 0;
-		while(hour >= 0 && minute >= 0) {
-			total = total + minute + (hour * 60);
-			hour = sc.nextInt();	minute = sc.nextInt();
+		System.out.println("İki tane saati askerî saat formatında giriniz: ");
+		System.out.println("Örn: 1030 1830");
+		System.out.println("(Bitirmek için negatif numara giriniz)");
+		int firstTime = 0, secondTime = 0, total = 0;
+		while(true) {
+			int hours, minutes;
+			firstTime = sc.nextInt();
+			if(firstTime < 0)
+				break;
+			secondTime = sc.nextInt();
+			hours = secondTime / 100 - firstTime / 100;
+			minutes = secondTime % 100 + (60 - firstTime % 100);
+			if(minutes > 0)
+				hours--;
+			total += hours * 60 + minutes;
 		}
 		System.out.println(total/60 + " saat ve " + total%60 + " dakika. ");
 		System.out.println("Saat başına $" + df.format((double) (money * 60)) + ". Toplam kazanç ise $" + df.format((double) (money * total)) + '.');

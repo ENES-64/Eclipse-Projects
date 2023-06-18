@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.io.*;
 
-//TODO Save the ante price.
 //This program simulates a blackjack game and saves statistics to a file.
 public class Personal02BlackJack {
 	//GLOBAL VARIABLES:
@@ -14,7 +13,7 @@ public class Personal02BlackJack {
 	static boolean dealerHasAce;
 	//MAIN:
 	@SuppressWarnings("resource")
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		while(true) {
 			//STATS SYSTEM START:
 			TreeMap<Integer, Integer> stats =new TreeMap<>();
@@ -43,7 +42,7 @@ public class Personal02BlackJack {
 					write.write("wins:0;losses:0;draws:0;blackjackwins:0;blackjacklosses:0;blackjackdraws:0;totalhandsplayed:0;");
 					fi = new FileInputStream(file);
 					settings = getStat.next();
-				} catch (IOException e2) {}
+				} catch (IOException e2) { System.out.println(e2); }
 			}
 			//Making sure no word is capitalized and there are no spaces.
 			settings = settings.toLowerCase();
@@ -71,9 +70,12 @@ public class Personal02BlackJack {
 			
 			18 is the maximum number of cards that can be pulled in one game between user and dealer.
 			So, 18 is the Magic Number. https://en.wikipedia.org/wiki/Magic_number_(programming)
-			Using byte since number of cards in a deck can't exceed 52.	*/
-			final byte MAXCARDS = 18;
-			int[][] cards =new int[2][MAXCARDS];
+			Using byte since number of cards in a deck can't exceed 52.	
+			Same with the maximum total value of cards and the dealer's must stand value	*/
+			final byte MAX_CARDS = 18, MAX_VALUE_BEFORE_BUST = 21, MUST_STAND_ON = 17;
+			
+			int[][] cards =new int[2][MAX_CARDS];
+			//Totals are the total value of the cards added which gets tested against several conditions.
 			//Counts are initialized to compensate for the 4 cards that are pulled at the beginning.
 			int userTotal = 0, dealerTotal = 0, userCount = 2, dealerCount = 3;
 			//Pulling the first 2 cards for user and dealer.
@@ -81,21 +83,21 @@ public class Personal02BlackJack {
 			userTotal = getCardValue(cards, 0, 0) + getCardValue(cards, 2, 0);
 			dealerTotal = getCardValue(cards, 1, 0) + getCardValue(cards, 3, 0);
 			System.out.print("Dealer's hand:" + showCard(cards, 1));
-			Thread.sleep(1000);
+			try {Thread.sleep(1000);} catch (InterruptedException e) { System.out.println(e); }
 			//If the user and dealer has 21, it's a push.
-			if(userTotal == 21 && dealerTotal == 21) {
+			if(userTotal == MAX_VALUE_BEFORE_BUST && dealerTotal == MAX_VALUE_BEFORE_BUST) {
 				System.out.print(" " + showCard(cards, 3) + "\n\nYour hand:" + showCard(cards, 0) + showCard(cards, 2)  + "\nPush.");
 				statIncrement(stats, 5);
 				statIncrement(stats, 6);
 				skip = true;
 			//If dealer has 21, dealer wins.
-			}else if(dealerTotal == 21) {
+			}else if(dealerTotal == MAX_VALUE_BEFORE_BUST) {
 				System.out.print(" " + showCard(cards, 3) + "\n\nYour hand:" + showCard(cards, 0) + showCard(cards, 2)  + "\nDealer wins.");
 				statIncrement(stats, 4);
 				statIncrement(stats, 6);
 				skip = true;
 				//If user has 21, user wins.
-			}else if(userTotal == 21) {
+			}else if(userTotal == MAX_VALUE_BEFORE_BUST) {
 				System.out.print(" " + showCard(cards, 3) + "\n\nYour hand:" + showCard(cards, 0) + showCard(cards, 2)  + "\nYou win!");
 				statIncrement(stats, 3);
 				statIncrement(stats, 6);
@@ -113,48 +115,48 @@ public class Personal02BlackJack {
 						userTotal += getCardValue(cards, userCount, userTotal);
 						System.out.print(showCard(cards, userCount) + "\n");
 						//Turn ACE's value of 11 into 1 if the total exceeds 21.
-						if(userTotal > 21 && userHasAce == true) {
+						if(userTotal > MAX_VALUE_BEFORE_BUST && userHasAce == true) {
 							userTotal -= 10;
 							userHasAce = false;
-						} if(userTotal > 21) {
+						} if(userTotal > MAX_VALUE_BEFORE_BUST) {
 							break;
-						} if(userTotal == 21)
+						} if(userTotal == MAX_VALUE_BEFORE_BUST)
 							break;
 					} else
 						break;
 				}
-				Thread.sleep(1000);
+				try {Thread.sleep(1000);} catch (InterruptedException e) { System.out.println(e); }
 				//Dealer part:
 				System.out.print("Dealer's hand: " + showCard(cards, 1) + showCard(cards, 3));
-				Thread.sleep(1000);
+				try {Thread.sleep(1000);} catch (InterruptedException e) { System.out.println(e); }
 				while(true) {
-					if(dealerTotal<17) {
-						Thread.sleep(1000);
+					if(dealerTotal < MUST_STAND_ON) {
+						try {Thread.sleep(1000);} catch (InterruptedException e) { System.out.println(e); }
 						dealerCount += 2;
 						pullCard(cards, dealerCount);
 						dealerTotal += getCardValue(cards, dealerCount, dealerTotal);
 						System.out.print("\n" + showCard(cards, dealerCount));
 						//Turn ACE's value of 11 into 1 if the total exceeds 21.
-						if(dealerTotal > 21 && dealerHasAce == true) {
+						if(dealerTotal > MAX_VALUE_BEFORE_BUST && dealerHasAce == true) {
 							dealerTotal -= 10;
 							dealerHasAce = false;
-						} if(dealerTotal > 21)
+						} if(dealerTotal > MAX_VALUE_BEFORE_BUST)
 							break;
-						if(dealerTotal == 21)
+						if(dealerTotal == MAX_VALUE_BEFORE_BUST)
 							break;
 					} else
 						break;
 				}
 				//Deciding the winner.
-				if((userTotal == dealerTotal) && userTotal <= 21 && dealerTotal <= 21) {
+				if((userTotal == dealerTotal) && userTotal <= MAX_VALUE_BEFORE_BUST && dealerTotal <= MAX_VALUE_BEFORE_BUST) {
 					System.out.print("\nPush.");
 					statIncrement(stats, 2);
 					statIncrement(stats, 6);
-				} else if(userTotal <= 21 && dealerTotal > userTotal && dealerTotal <= 21) {
+				} else if(userTotal <= MAX_VALUE_BEFORE_BUST && dealerTotal > userTotal && dealerTotal <= MAX_VALUE_BEFORE_BUST) {
 					System.out.print("\nDealer wins.");
 					statIncrement(stats, 1);
 					statIncrement(stats, 6);
-				} else if((dealerTotal > 21 || userTotal > dealerTotal) && userTotal <= 21) {
+				} else if((dealerTotal > MAX_VALUE_BEFORE_BUST || userTotal > dealerTotal) && userTotal <= MAX_VALUE_BEFORE_BUST) {
 					System.out.print("\nYou win!");
 					statIncrement(stats, 0);
 					statIncrement(stats, 6);
