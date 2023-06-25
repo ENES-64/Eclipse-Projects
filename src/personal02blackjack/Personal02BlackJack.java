@@ -12,6 +12,9 @@ public class Personal02BlackJack {
 	static boolean userHasAce;
 	static boolean dealerHasAce;
 	//MAIN:
+	//Suppressing warnings since the IDE thinks the resources are never closed after the first while loop ends,
+	//but it never ends and the program ends while being inside the first while loop and 
+	//the resources are closed before that.
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		while(true) {

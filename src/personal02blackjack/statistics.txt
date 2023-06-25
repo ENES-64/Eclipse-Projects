@@ -1,1 +1,1 @@
-wins:325;losses:389;draws:175;blackjackwins:34;blackjacklosses:45;blackjackdraws:36;totalhandsplayed:1004;
+wins:325;losses:390;draws:175;blackjackwins:35;blackjacklosses:45;blackjackdraws:36;totalhandsplayed:1006;
